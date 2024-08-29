@@ -4,41 +4,56 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+    <Button
+        android:id="@+id/gallery_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/upload"
-        android:scaleType="centerInside"
-        android:background="@android:color/darker_gray" />
+        android:text="Open Gallery"
+        android:src="@drawable/upload_img"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/capture_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gallery_button"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="Capture Photo"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:textColor="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/homeprogress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/capture_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/car_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
+        android:layout_below="@id/homeprogress"
         android:layout_marginTop="16dp"
         android:text="Recognized Plate: "
         android:textSize="18sp"
         android:textColor="@android:color/black" />
 
-
-    <Button
-        android:id="@+id/next_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:scaleType="centerInside"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/car_plate"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Select Image" />
+        android:src="@drawable/cam"
+        />
 
 </RelativeLayout>

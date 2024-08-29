@@ -7,6 +7,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 picassoVersion = "2.71828"
 unirestJava = "3.13.10"
+playServicesLocation = "21.3.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +17,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 squareup-picasso = { module = "com.squareup.picasso:picasso", version.ref = "picassoVersion" }
 unirest-java = { module = "com.konghq:unirest-java", version = "2.0.01" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
