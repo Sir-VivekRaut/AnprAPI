@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <!-- Table Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <!-- Registration Number -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registration Number"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/regNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Owner Name -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner Name"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/owner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Chassis Number -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chassis Number"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/chassis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Engine Number -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Engine Number"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/engine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Vehicle Class -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle Class"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleClass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Registration Authority -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registration Authority"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/regAuthority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Manufacturer Name -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manufacturer Name"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleManufacturerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Manufacture Date -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manufacture Date"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/manufactureDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Model -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Model"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/model"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Vehicle Colour -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle Colour"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleColour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Fuel Type -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fuel Type"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/fuelType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Norms Type -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Norms Type"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/normsType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Registration Date -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registration Date"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/regDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Fitness Validity -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fitness Validity"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/fitUpto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- PUC Validity -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PUC Validity"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/puccUpto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Insurance Company -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Insurance Company"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleInsuranceCompanyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+            <!-- Insurance Validity -->
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Insurance Validity"
+                    android:padding="8dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/vehicleInsuranceUpto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp" />
+            </TableRow>
+
+
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>
