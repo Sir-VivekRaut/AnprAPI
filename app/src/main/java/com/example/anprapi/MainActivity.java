@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.location.Location;
 import android.media.ExifInterface;
@@ -43,6 +44,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,6 +53,7 @@ import java.io.OutputStream;
 
 
 import android.Manifest;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private Button camera;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +103,14 @@ public class MainActivity extends AppCompatActivity {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent icam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(icam, CAMERA_REQUEST_CODE);
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+                imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
             }
         });
     }
@@ -118,33 +128,40 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == PICK_IMAGE && data != null) {
                 try {
                     Uri imageUri = data.getData();
-                    Bitmap bitmap = decodeBitmap(imageUri); // Improved decoding method
+                    Bitmap bitmap = decodeBitmap(imageUri);
+
+                    // Rotate the image to landscape
+                    bitmap = rotateToLandscape(bitmap);
+
                     imageView.setImageBitmap(bitmap);
 
-                    File file = new File(getCacheDir(), "selectedImage.jpg");
-                    FileOutputStream fOut = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                    fOut.flush();
-                    fOut.close();
+                    saveImageToCache(bitmap, "selectedImage.jpg");
 
-                    recognizePlate(file.getPath());
+                    // Compress before sending to recognizePlate
+                    Bitmap compressedBitmap = compressBitmap(bitmap, 3 * 1024 * 1024); // 3MB limit
+                    saveImageToCache(compressedBitmap, "selectedImageCompressed.jpg");
+
+                    recognizePlate(new File(getCacheDir(), "selectedImageCompressed.jpg").getPath());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this, "Error processing the image", Toast.LENGTH_SHORT).show();
                 }
-            } else if (requestCode == CAMERA_REQUEST_CODE && data != null) {
-                Bitmap imgBit = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(imgBit);
-                saveImageToGallery(imgBit);
-
-                File file = new File(getCacheDir(), "capturedImage.jpg");
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
                 try {
-                    FileOutputStream fOut = new FileOutputStream(file);
-                    imgBit.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                    fOut.flush();
-                    fOut.close();
+                    Bitmap bitmap = decodeBitmap(imageUri);
 
-                    recognizePlate(file.getPath());
+                    // Rotate the image to landscape
+                    bitmap = rotateToLandscape(bitmap);
+
+                    imageView.setImageBitmap(bitmap);
+
+                    saveImageToGallery(bitmap);
+
+                    // Compress before sending to recognizePlate
+                    Bitmap compressedBitmap = compressBitmap(bitmap, 3 * 1024 * 1024); // 3MB limit
+                    saveImageToCache(compressedBitmap, "capturedImageCompressed.jpg");
+
+                    recognizePlate(new File(getCacheDir(), "capturedImageCompressed.jpg").getPath());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this, "Error processing the image", Toast.LENGTH_SHORT).show();
@@ -153,23 +170,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private Bitmap rotateToLandscape(Bitmap bitmap) {
+        if (bitmap.getWidth() < bitmap.getHeight()) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90); // Rotate 90 degrees to convert portrait to landscape
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        }
+        return bitmap; // Already in landscape
+    }
+
+    private Bitmap compressBitmap(Bitmap bitmap, int maxSize) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+        while (out.size() > maxSize && quality > 0) {
+            out.reset();
+            quality -= 5;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+        }
+        return BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size());
+    }
+
+    private void saveImageToCache(Bitmap bitmap, String fileName) throws IOException {
+        File file = new File(getCacheDir(), fileName);
+        try (FileOutputStream fOut = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+        }
+    }
+
+
     private Bitmap decodeBitmap(Uri uri) {
-        try {
-            // Open a stream to the image
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-
-            // Get the dimensions of the image
+        try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
-
-            // Calculate inSampleSize
-            options.inSampleSize = calculateInSampleSize(options, 1000, 1000); // Desired width and height
             options.inJustDecodeBounds = false;
-
-            // Decode the image file into a Bitmap sized to fill the view
-            inputStream = getContentResolver().openInputStream(uri);
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             return BitmapFactory.decodeStream(inputStream, null, options);
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,52 +212,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Calculate the inSampleSize
-    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
 
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
 
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 
     private void saveImageToGallery(Bitmap bitmap) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            // Fetch current location
             fusedLocationClient.getLastLocation().addOnCompleteListener(this, task -> {
                 if (task.isSuccessful() && task.getResult() != null) {
                     Location location = task.getResult();
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    String coordinatesText = String.format("Lat: %.4f, Long: %.4f", latitude, longitude);
+                    String coordinatesText = String.format("Location:\nLat: %.4f, Long: %.4f", latitude, longitude);
 
-                    // Create a mutable bitmap
                     Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
-                    // Initialize Canvas and Paint for drawing text
                     Canvas canvas = new Canvas(mutableBitmap);
                     Paint paint = new Paint();
-                    paint.setColor(Color.parseColor("#00FF7F")); // Set color to #00FF7F (Lime Green)
-                    paint.setTextSize(10); // Adjusted text size
+                    paint.setColor(Color.parseColor("#00FF7F"));
+                    paint.setTextSize(100);
                     paint.setAntiAlias(true);
+                    paint.setShadowLayer(5.0f, 10.0f, 10.0f, Color.BLACK);
 
-                    // Draw text on the bitmap
-                    canvas.drawText(coordinatesText, 10, mutableBitmap.getHeight() - 10, paint);
+                    int padding = 20;
+                    canvas.drawText(coordinatesText, padding, mutableBitmap.getHeight() - padding, paint);
 
-                    // Save the modified bitmap
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.Images.Media.DISPLAY_NAME, "CapturedImage_" + System.currentTimeMillis() + ".jpg");
                     values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
@@ -230,10 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                    try {
-                        OutputStream outputStream = getContentResolver().openOutputStream(uri);
-                        mutableBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                        outputStream.close();
+                    try (OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
+                        mutableBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);  // High quality (no compression)
                         Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Toast.makeText(this, "Failed to save", Toast.LENGTH_SHORT).show();
@@ -248,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void recognizePlate(String filePath) {
         progressBar.setVisibility(View.VISIBLE);
 
@@ -255,10 +269,20 @@ public class MainActivity extends AppCompatActivity {
         MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
         File file = new File(filePath);
 
+        // Compression before sending to the API
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        File compressedFile = new File(getCacheDir(), "compressedImage.jpg");
+        try (FileOutputStream fOut = new FileOutputStream(compressedFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fOut);  // Compress to reduce the file size to under 3MB
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("upload", file.getName(),
-                        RequestBody.create(MEDIA_TYPE_JPEG, file))
+                .addFormDataPart("upload", compressedFile.getName(),
+                        RequestBody.create(MEDIA_TYPE_JPEG, compressedFile))
                 .build();
 
         Request request = new Request.Builder()
@@ -293,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void parseJsonResponse(String json) {
         try {
@@ -331,8 +356,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted
-                // You may want to perform any actions that require location permission here
             } else {
                 // Permission denied
                 Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show();
