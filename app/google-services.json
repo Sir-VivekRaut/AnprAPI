@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "649905630830",
+    "project_id": "login-7a1d2",
+    "storage_bucket": "login-7a1d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649905630830:android:cb937b67be1d17be5a407f",
+        "android_client_info": {
+          "package_name": "com.example.anprapi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4wOeff_tMLYUTeXdWPO-YL_QU1wIadiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

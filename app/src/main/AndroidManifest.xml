@@ -36,13 +36,13 @@
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ImageActivity" />
 
         <!-- Text Activity -->
         <activity android:name=".TextActivity" />
 
         <!-- Display Activity -->
-        <activity android:name=".DisplayActivity" />
+        <activity android:name=".ApiFetchActivity" />
 
         <!-- FileProvider for camera handling -->
         <provider

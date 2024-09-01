@@ -16,7 +16,7 @@ import org.json.*;
 
 import java.util.Locale;
 
-public class DisplayActivity extends AppCompatActivity {
+public class ApiFetchActivity extends AppCompatActivity {
 
     private TextView regNo, owner, chassis, engine, vehicleClass, regAuthority,
             vehicleManufacturerName, manufactureDate, model, vehicleColour,
@@ -28,7 +28,7 @@ public class DisplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display);
+        setContentView(R.layout.activity_apifetch);
 
 
         regNo = findViewById(R.id.regNo);

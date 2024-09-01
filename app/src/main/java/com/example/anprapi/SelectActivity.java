@@ -27,7 +27,7 @@ public class SelectActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectActivity.this, MainActivity.class);
+                Intent intent = new Intent(SelectActivity.this, ImageActivity.class);
                 startActivity(intent);
             }
         });

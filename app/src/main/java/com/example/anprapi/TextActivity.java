@@ -28,7 +28,7 @@ public class TextActivity extends AppCompatActivity {
                 String vehicleNumber = vehicleNumEditText.getText().toString().trim();
 
                 if (!vehicleNumber.isEmpty()) {
-                    Intent intent = new Intent(TextActivity.this, DisplayActivity.class);
+                    Intent intent = new Intent(TextActivity.this, ApiFetchActivity.class);
                     intent.putExtra("vehicleNumber", vehicleNumber);
                     startActivity(intent);
                 }else{
