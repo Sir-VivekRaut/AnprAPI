@@ -27,7 +27,7 @@
 
         <!-- Select Activity -->
         <activity
-            android:name=".SelectActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +35,10 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".SignUpActivity"/>
+
+        <activity android:name=".SelectActivity"/>
         <!-- Main Activity -->
         <activity android:name=".ImageActivity" />
 
@@ -43,6 +47,10 @@
 
         <!-- Display Activity -->
         <activity android:name=".ApiFetchActivity" />
+
+        <activity android:name=".EditProfileActivity"/>
+
+        <activity android:name=".ProfileActivity"/>
 
         <!-- FileProvider for camera handling -->
         <provider

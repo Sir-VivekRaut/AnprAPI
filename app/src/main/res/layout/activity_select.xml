@@ -3,27 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="@color/lavender">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:fontFamily="sans-serif-condensed-light"
+    android:text="With Our Guide-"
+    android:textAlignment="center"
+    android:textColor="#D61B1B"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    />
 
     <ImageView
         android:id="@+id/sir"
         android:layout_width="163dp"
-        android:layout_height="271dp"
+        android:layout_height="210dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/sir" />
+
+    <TextView
+        android:id="@+id/presents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sir"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="We present-"
+        android:textAlignment="center"
+        android:textColor="#D61B1B"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_below="@id/sir"
+        android:layout_below="@id/presents"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-condensed-light"
-        android:text="AutoTrack"
+        android:text="QuickAutoTrackInfo"
         android:textAlignment="center"
         android:textColor="#D61B1B"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:shadowColor="@color/black"
         />
 
     <Button
